@@ -5,34 +5,39 @@ steps:
 # Build the Bazel builder and output the version we built with.
 - name: 'gcr.io/cloud-builders/docker'
   args: ['build', '--tag=gcr.io/$PROJECT_ID/bazel', '.']
+  dir: 'bazel'
 - name: 'gcr.io/$PROJECT_ID/bazel'
   args: ['version']
+  dir: 'bazel'
 
 # Not clear why we need this; at least some users get permission errors on the
 # next build step unless we do this first. This is a work-around for issue #53:
 # https://github.com/GoogleCloudPlatform/cloud-builders/issues/53
 - name: 'ubuntu'
   args: ['chmod', 'a+r', '-R', '.']
+  dir: 'bazel'
 
 # Build the example.
 - name: 'gcr.io/$PROJECT_ID/bazel'
   args: ['run', '//subdir:target', '--verbose_failures']
-  dir: 'examples'
+  dir: 'bazel/examples'
 
 # Example was built as bazel/subdir:target.
 - name: 'gcr.io/cloud-builders/docker'
   args: ['run', 'bazel/subdir:target']
+  dir: 'bazel'
 
 # TODO(mattmoor): Test docker_push as well.
 
 # Build the Go binary
 - name: 'gcr.io/$PROJECT_ID/bazel'
   args: ['build', '//subdir:hello', '--verbose_failures']
-  dir: 'examples'
+  dir: 'bazel/examples'
 
 # Verify that the Go binary is available post-build
 - name: 'ubuntu'
   args: ['/workspace/examples/bazel-bin/subdir/hello']
+  dir: 'bazel'
 
 
 images: ['gcr.io/$PROJECT_ID/bazel']
