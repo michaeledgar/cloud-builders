@@ -37,7 +37,7 @@ steps:
 # Verify that the Go binary is available post-build
 - name: 'ubuntu'
   entrypoint: 'bash'
-  args: ['/workspace/bazel/examples/bazel-bin/subdir/hello && sleep 30']
+  args: ['/workspace/bazel/examples/bazel-bin/subdir/hello', '&&', 'sleep', '30']
   dir: 'bazel'
 
 
