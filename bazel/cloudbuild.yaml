@@ -34,16 +34,9 @@ steps:
   args: ['build', '//subdir:hello', '--verbose_failures']
   dir: 'bazel/examples'
 
-# Enable execution for new binary.
-- name: 'ubuntu'
-  entrypoint: 'bash'
-  args: ['chmod', '+x', '/workspace/bazel/examples/bazel-bin/subdir/hello', '&&', 'sleep', '10']
-  dir: 'bazel'
-
 # Verify that the Go binary is available post-build
 - name: 'ubuntu'
-  entrypoint: 'bash'
-  args: ['/workspace/bazel/examples/bazel-bin/subdir/hello', '&&', 'sleep', '10']
+  args: ['/workspace/bazel/examples/bazel-bin/subdir/hello']
   dir: 'bazel'
 
 
